@@ -59,11 +59,6 @@
               <a href="#contact" class="nav-link" data-animate="scrolling">Contact</a>
             </li>
           </ul>
-          <!-- <ul class="nav ml-auto">
-            <li class="nav-item">
-              <button class="btn btn-fab btn-theme no-shadow">En</button>
-            </li>
-          </ul> -->
         </div>
       </div>
     </div> <!-- End Navbar -->
@@ -81,7 +76,7 @@
       <div class="row">
         <div class="col-lg-4 py-3">
           <div class="img-place wow fadeInUp">
-            <img src="../assets/img/person.jpg" alt="">
+            <img src="../assets/img/profile_2.jpg" alt="">
           </div>
         </div>
         <div class="col-lg-6 offset-lg-1 wow fadeInRight">
@@ -241,7 +236,7 @@
           <span>Projects Completed</span>
         </div>
         <div class="col-md-6 col-lg-3 py-4 wow fadeIn">
-          <h1 class="number" data-number="6">6</h1>
+          <h1 class="number" data-number="12">12</h1>
           <span>Certifications</span>
         </div>
         <div class="col-md-6 col-lg-3 py-4 wow fadeIn">
@@ -249,8 +244,8 @@
           <span>Years of Experience</span>
         </div>
         <div class="col-md-6 col-lg-3 py-4 wow fadeIn">
-          <h1 class="number" data-number="100">100</h1>
-          <span>Client Satisfaction</span>
+          <h1 class="number" data-number="102">102</h1>
+          <span>Leetcode Problems</span>
         </div>
       </div>
     </div>
@@ -309,7 +304,7 @@
         </div>
       </div> <!-- End gridder -->
       <div class="text-center wow fadeInUp">
-        <a href="javascript:void(0)" class="btn btn-theme">Load More</a>
+        <a href="https://github.com/Ashutosh-Rawat" class="btn btn-theme" target="_blank">Load More</a>
       </div>
     </div>
   </div> <!-- End Portfolio page -->
@@ -359,6 +354,36 @@
       </div>
     </div>
   </div> <!-- End footer -->
+
+  <!-- Project Details Modal -->
+  <div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fg-theme" id="projectModalTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="project-carousel owl-carousel"></div>
+              </div>
+              <div class="col-md-4">
+                <p class="project-description"></p>
+                <div class="project-technologies mt-3"></div>
+                <div class="project-link mt-3">
+                  <a href="#" class="btn btn-theme" target="_blank">Visit Project</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <script src="../assets/js/jquery-3.5.1.min.js"></script>
   <script src="../assets/js/bootstrap.bundle.min.js"></script>
