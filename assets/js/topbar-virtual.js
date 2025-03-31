@@ -2,6 +2,16 @@ $(function() {
   // Initialize EmailJS with your public key
   emailjs.init("Z--PbmHadH3VtMEnr");
 
+  // Add custom easing function if needed
+  $.extend($.easing, {
+    easeInOutExpo: function(x, t, b, c, d) {
+      if (t === 0) return b;
+      if (t === d) return b + c;
+      if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+      return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
+    }
+  });
+
   // Enhanced Notification system
   function showNotification(message, isError = false) {
     const $notification = $('#notification');
@@ -79,12 +89,60 @@ $(function() {
       });
   });
 
-  // Enhanced Project Data
+  // Enhanced Smooth Scrolling for Navigation
+  $('[data-animate="scrolling"]').on('click', function(e) {
+    e.preventDefault();
+    const target = $(this).attr('href');
+    
+    // Check if target exists
+    if (target === '#' || !$(target).length) return;
+    
+    // Calculate offset considering sticky navbar
+    const navbarHeight = $('.navbar.sticky').outerHeight() || 70;
+    const targetPosition = $(target).offset().top - navbarHeight;
+    
+    // Smooth scroll with fallback to 'swing' if custom easing fails
+    try {
+      $('html, body').stop().animate({
+        scrollTop: targetPosition
+      }, 800, 'easeInOutExpo');
+    } catch (e) {
+      $('html, body').stop().animate({
+        scrollTop: targetPosition
+      }, 800, 'swing');
+    }
+    
+    // Update active nav item
+    $('.navbar-nav .nav-item').removeClass('active');
+    $(this).parent().addClass('active');
+    
+    // Close mobile menu if open
+    $('.navbar-collapse').collapse('hide');
+  });
+
+  // Resume Download Functionality
+  $('#downloadResumeBtn').on('click', function(e) {
+    e.preventDefault();
+    
+    // Create temporary link
+    const link = document.createElement('a');
+    link.href = '../../assets/docs/ashutosh_singh_rawat_ashutoshrawat325_gmail_com.pdf';
+    link.download = 'Ashutosh_Singh_Rawat_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Optional: Track download event
+    console.log('Resume downloaded');
+    showNotification('Resume download started!');
+  });
+
+  // Projects data - updated with all projects
   const projects = {
     'job-portal': {
       title: 'Job Portal - Easily',
       period: 'July 2024 - December 2024',
-      description: 'A dynamic job portal with comprehensive features:<br><br>• Secure JWT authentication for employers and candidates<br>• Real-time job application tracking system<br>• Automated email notifications<br>• Responsive design for all devices<br>• Form validations for data integrity',
+      description: 'A dynamic job portal with comprehensive features...',
       technologies: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'EJS'],
       images: ['../assets/img/work/work-1.jpg', '../assets/img/work/work-1-2.jpg', '../assets/img/work/work-1-3.jpg'],
       liveLink: 'https://jobportal-easily.onrender.com/',
@@ -92,104 +150,107 @@ $(function() {
     },
     'ecommerce-api': {
       title: 'E-commerce API',
-      period: 'October 2024 - December 2024',
-      description: 'Complete e-commerce solution with:<br><br>• Product catalog management<br>• Secure payment processing<br>• User authentication with JWT<br>• MongoDB transactions for safety<br>• Comprehensive Swagger documentation<br>• Winston logging system',
-      technologies: ['Node.js', 'Express.js', 'JWT', 'MongoDB', 'Mongoose', 'Swagger UI', 'Winston'],
+      period: 'January 2024 - March 2024',
+      description: 'A RESTful API for e-commerce applications with product management, user authentication, and order processing.',
+      technologies: ['Node.js', 'Express.js', 'MongoDB', 'JWT', 'REST'],
       images: ['../assets/img/work/work-2.jpg', '../assets/img/work/work-2-2.jpg'],
-      liveLink: 'https://ecom-api-kcuj.onrender.com/api/docs',
-      codeLink: 'https://github.com/Ashutosh-Rawat/ecommerce-api'
+      liveLink: '#',
+      codeLink: '#'
     },
     'music-player': {
-      title: 'Music Player App',
-      period: 'July 2024 - October 2024',
-      description: 'Immersive audio experience featuring:<br><br>• Sleek, intuitive interface<br>• Smooth audio playback controls<br>• Playlist management<br>• Responsive design<br>• Cross-browser compatibility',
-      technologies: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'jQuery'],
-      images: ['../assets/img/work/work-3.jpg', '../assets/img/work/work-3-2.jpg'],
-      liveLink: 'https://ashutosh-rawat.github.io/musicplayer/',
-      codeLink: 'https://github.com/Ashutosh-Rawat/musicplayer'
+      title: 'Music Player',
+      period: 'November 2023 - December 2023',
+      description: 'An interactive audio player with playlist management and visual effects.',
+      technologies: ['HTML5 Audio API', 'JavaScript', 'CSS3', 'Web Audio API'],
+      images: ['../assets/img/work/work-3.jpg'],
+      liveLink: '#',
+      codeLink: '#'
     },
     'movieflix': {
-      title: 'MovieFlix Streaming Platform',
-      period: 'October 2023 - January 2024',
-      description: 'Streaming service clone with:<br><br>• Real-time movie data from TMDb API<br>• Trailer playback functionality<br>• Responsive grid layout<br>• Detailed movie information<br>• User-friendly navigation',
-      technologies: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'TMDb API', 'jQuery'],
-      images: ['../assets/img/work/work-4.jpg', '../assets/img/work/work-4-2.jpg'],
-      liveLink: 'https://ashutosh-rawat.github.io/Video-streaming-website-clone/',
-      codeLink: 'https://github.com/Ashutosh-Rawat/Video-streaming-website-clone'
+      title: 'MovieFlix',
+      period: 'April 2024 - June 2024',
+      description: 'A streaming service clone with movie listings and user profiles.',
+      technologies: ['React', 'Node.js', 'MongoDB', 'Redux'],
+      images: ['../assets/img/work/work-4.jpg'],
+      liveLink: '#',
+      codeLink: '#'
     }
   };
 
-  // Enhanced Project Modal Initialization
-  $('.grid-item').on('click', function() {
+  // Project Modal Initialization with event delegation
+  $(document).on('click', '.grid-item', function() {
     const projectId = $(this).data('project');
+    
+    if (!projectId) {
+      console.error('No project ID found for this item');
+      return;
+    }
+
     const project = projects[projectId];
     
-    if (project) {
-      // Set modal content
-      $('.project-title').text(project.title);
-      $('.period-text').text(project.period);
-      $('.project-description').html(project.description);
-      
-      // Build technology tags
-      const techTags = $('.tech-tags');
-      techTags.empty();
-      project.technologies.forEach(tech => {
-        techTags.append(`<span class="tech-tag">${tech}</span>`);
-      });
-      
-      // Set project links
-      $('#projectLiveLink').attr('href', project.liveLink);
-      $('#projectCodeLink').attr('href', project.codeLink);
-      
-      // Initialize carousel
-      const carousel = $('.project-carousel');
-      carousel.owlCarousel('destroy');
-      carousel.empty();
-      
-      project.images.forEach((img, index) => {
-        carousel.append(`
-          <div class="item">
-            <img src="${img}" alt="${project.title} - Screenshot ${index + 1}" class="img-fluid">
-          </div>
-        `);
-      });
-      
-      // Configure carousel
-      carousel.owlCarousel({
-        items: 1,
-        loop: true,
-        margin: 20,
-        nav: true,
-        dots: true,
-        autoplay: true,
-        autoplayTimeout: 5000,
-        autoplayHoverPause: true,
-        navText: [
-          '<span class="ti-arrow-left"></span>',
-          '<span class="ti-arrow-right"></span>'
-        ],
-        responsive: {
-          0: {
-            stagePadding: 10
-          },
-          768: {
-            stagePadding: 30
-          },
-          992: {
-            stagePadding: 50
-          }
-        }
-      });
-      
-      // Show modal with animation
-      $('#projectModal').modal('show')
-        .on('shown.bs.modal', function() {
-          carousel.trigger('refresh.owl.carousel');
-        });
+    if (!project) {
+      console.error(`Project data not found for ID: ${projectId}`);
+      return;
     }
+
+    // Set modal content
+    $('.project-title').text(project.title);
+    $('.period-text').text(project.period);
+    $('.project-description').html(project.description);
+    
+    // Build technology tags
+    const techTags = $('.tech-tags');
+    techTags.empty();
+    project.technologies.forEach(tech => {
+      techTags.append(`<span class="tech-tag">${tech}</span>`);
+    });
+    
+    // Set project links
+    $('#projectLiveLink').attr('href', project.liveLink || '#');
+    $('#projectCodeLink').attr('href', project.codeLink || '#');
+    
+    // Initialize carousel
+    const carousel = $('.project-carousel');
+    carousel.owlCarousel('destroy');
+    carousel.empty();
+    
+    project.images.forEach((img, index) => {
+      carousel.append(`
+        <div class="item">
+          <img src="${img}" alt="${project.title} - Screenshot ${index + 1}" class="img-fluid">
+        </div>
+      `);
+    });
+    
+    // Configure carousel
+    carousel.owlCarousel({
+      items: 1,
+      loop: true,
+      margin: 20,
+      nav: true,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 5000,
+      autoplayHoverPause: true,
+      navText: [
+        '<span class="ti-arrow-left"></span>',
+        '<span class="ti-arrow-right"></span>'
+      ],
+      responsive: {
+        0: { stagePadding: 10 },
+        768: { stagePadding: 30 },
+        992: { stagePadding: 50 }
+      }
+    });
+    
+    // Show modal with animation
+    $('#projectModal').modal('show')
+      .on('shown.bs.modal', function() {
+        carousel.trigger('refresh.owl.carousel');
+      });
   });
 
-  // Portfolio Filtering with Isotope
+  // Initialize Isotope for filtering
   const $grid = $('.gridder').isotope({
     itemSelector: '.grid-item',
     percentPosition: true,
@@ -205,7 +266,7 @@ $(function() {
     }
   });
 
-  // Filter items on button click
+  // Filter projects
   $('.filterable-button').on('click', 'button', function() {
     const filterValue = $(this).attr('data-filter');
     $('.filterable-button button').removeClass('selected');
@@ -226,7 +287,7 @@ $(function() {
     live: true
   }).init();
 
-  // Back to top button functionality
+  // Back to top button
   const backTop = $(".btn-back_to_top");
 
   $(window).scroll(function() {
@@ -240,59 +301,11 @@ $(function() {
   backTop.click(function() {
     $('html, body').animate({
       scrollTop: 0
-    }, 800, 'easeInOutExpo');
+    }, 800, 'swing');
     return false;
   });
 
-  // Smooth scrolling for anchor links
-  $('[data-animate="scrolling"]').on('click', function(e) {
-    e.preventDefault();
-    const target = $(this).attr('href');
-    if (target === '#') return;
-    
-    $('html, body').animate({
-      scrollTop: $(target).offset().top - 70
-    }, 800, 'easeInOutExpo');
-  });
-
-  // Counter animation
-  const counterInit = function() {
-    if ($('.section-counter').length > 0) {
-      $('.section-counter').waypoint(function(direction) {
-        if (direction === 'down' && !$(this.element).hasClass('animated')) {
-          $('.number').each(function() {
-            const $this = $(this);
-            const num = $this.data('number');
-            $this.animateNumber(
-              {
-                number: num,
-                numberStep: $.animateNumber.numberStepFactories.separator(',')
-              }, 
-              2000
-            );
-          });
-          $(this.element).addClass('animated');
-        }
-      }, { offset: '85%' });
-    }
-  };
-  counterInit();
-
-  // Initialize other plugins
-  $('.testi-carousel').owlCarousel({
-    items: 1,
-    loop: true,
-    autoplay: true,
-    autoplayTimeout: 6000,
-    autoplayHoverPause: true,
-    nav: false,
-    dots: true
-  });
-
-  $('.vg-select').niceSelect();
-  $('[data-toggle="tooltip"]').tooltip();
-
-  // Sticky Navigation
+  // Enhanced Sticky Navigation
   const stickyNav = {
     $navbar: $('.navbar.sticky'),
     navOffsetTop: 0,
@@ -300,6 +313,18 @@ $(function() {
 
     init: function() {
       if (this.$navbar.length === 0) return;
+
+      // Add fixed position and z-index to navbar
+      this.$navbar.css({
+        'position': 'fixed',
+        'top': 0,
+        'width': '100%',
+        'z-index': 1030,
+        'transition': 'all 0.3s ease'
+      });
+
+      // Add padding to body to prevent content jump
+      $('body').css('padding-top', this.$navbar.outerHeight());
 
       this.navOffsetTop = this.$navbar.offset().top;
       this.cacheSections();
@@ -324,6 +349,8 @@ $(function() {
     bindEvents: function() {
       $(window).on('scroll', () => this.update());
       $(window).on('resize', () => {
+        // Update body padding when navbar height changes
+        $('body').css('padding-top', this.$navbar.outerHeight());
         this.navOffsetTop = this.$navbar.offset().top;
         this.cacheSections();
         this.update();
@@ -333,14 +360,10 @@ $(function() {
     update: function() {
       const scrollTop = $(window).scrollTop();
       
-      // Toggle sticky class
-      if (scrollTop > this.navOffsetTop) {
-        this.$navbar.addClass('floating').css('background-color', 'rgba(52, 58, 64, 0.95)');
-      } else {
-        this.$navbar.removeClass('floating').css('background-color', 'rgba(104, 102, 102, 0.8)');
-      }
+      // Always keep navbar fixed at top
+      this.$navbar.css('background-color', scrollTop > 50 ? 'rgba(52, 58, 64, 0.95)' : 'rgba(104, 102, 102, 0.8)');
 
-      // Update active nav item
+      // Update active section in navigation
       this.sections.forEach(section => {
         if (scrollTop >= section.top && 
             (scrollTop < section.top + section.target.outerHeight())) {
@@ -351,5 +374,6 @@ $(function() {
     }
   };
 
+  // Initialize sticky navigation
   stickyNav.init();
 });

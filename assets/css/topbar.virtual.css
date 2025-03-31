@@ -1,3 +1,22 @@
+.navbar.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: all 0.3s ease;
+  z-index: 1030;
+}
+
+/* Add this to prevent content jumping when navbar becomes fixed */
+body {
+  padding-top: 70px; /* Adjust based on your navbar height */
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
 /* ======================
    Base Styles
    ====================== */
