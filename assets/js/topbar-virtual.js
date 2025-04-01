@@ -137,6 +137,18 @@ $(function() {
     showNotification('Resume download started!');
   });
 
+  // Skill Items Animation
+  $('.skill-item').hover(
+    function() {
+      $(this).addClass('hover-effect');
+      $(this).find('.skill-icon').css('transform', 'scale(1.1)');
+    },
+    function() {
+      $(this).removeClass('hover-effect');
+      $(this).find('.skill-icon').css('transform', 'scale(1)');
+    }
+  );
+
   // Projects data - updated with all projects
   const projects = {
     'job-portal': {
