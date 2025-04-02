@@ -156,7 +156,7 @@ $(function() {
       period: 'July 2024 - December 2024',
       description: 'A dynamic job portal with comprehensive features...',
       technologies: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'EJS'],
-      images: ['../assets/img/work/work-1.jpg', '../assets/img/work/work-1-2.jpg', '../assets/img/work/work-1-3.jpg'],
+      images: ['../assets/img/projects/easily/easily-img1.png', '../assets/img/projects/easily/easily-img2.png', '../assets/img/projects/easily/easily-img3.png', '../assets/img/projects/easily/easily-img4.png', '../assets/img/projects/easily/easily-img5.png'],
       liveLink: 'https://jobportal-easily.onrender.com/',
       codeLink: 'https://github.com/Ashutosh-Rawat/job-portal'
     },
@@ -165,27 +165,27 @@ $(function() {
       period: 'January 2024 - March 2024',
       description: 'A RESTful API for e-commerce applications with product management, user authentication, and order processing.',
       technologies: ['Node.js', 'Express.js', 'MongoDB', 'JWT', 'REST'],
-      images: ['../assets/img/work/work-2.jpg', '../assets/img/work/work-2-2.jpg'],
-      liveLink: '#',
-      codeLink: '#'
+      images: ['../assets/img/projects/ecom-api/ecom-api-img1.png', '../assets/img/projects/ecom-api/ecom-api-img2.png', '../assets/img/projects/ecom-api/ecom-api-img3.png'],
+      liveLink: 'https://ecom-api-kcuj.onrender.com/api/docs',
+      codeLink: 'https://github.com/Ashutosh-Rawat/ecom-api'
     },
     'music-player': {
       title: 'Music Player',
       period: 'November 2023 - December 2023',
       description: 'An interactive audio player with playlist management and visual effects.',
       technologies: ['HTML5 Audio API', 'JavaScript', 'CSS3', 'Web Audio API'],
-      images: ['../assets/img/work/work-3.jpg'],
-      liveLink: '#',
-      codeLink: '#'
+      images: ['../assets/img/projects/music-player/music-player-img1.png', '../assets/img/projects/music-player/music-player-img2.png'],
+      liveLink: 'https://ashutosh-rawat.github.io/musicplayer/',
+      codeLink: 'https://github.com/Ashutosh-Rawat/musicplayer'
     },
     'movieflix': {
       title: 'MovieFlix',
       period: 'April 2024 - June 2024',
       description: 'A streaming service clone with movie listings and user profiles.',
       technologies: ['React', 'Node.js', 'MongoDB', 'Redux'],
-      images: ['../assets/img/work/work-4.jpg'],
-      liveLink: '#',
-      codeLink: '#'
+      images: ['../assets/img/projects/movieflix/movieflix-img1.png', '../assets/img/projects/movieflix/movieflix-img2.png', '../assets/img/projects/movieflix/movieflix-img3.png', '../assets/img/projects/movieflix/movieflix-img4.png', '../assets/img/projects/movieflix/movieflix-img5.png', '../assets/img/projects/movieflix/movieflix-img6.png'],
+      liveLink: 'https://ashutosh-rawat.github.io/Video-streaming-website-clone/',
+      codeLink: 'https://github.com/Ashutosh-Rawat/Video-streaming-website-clone'
     }
   };
 
