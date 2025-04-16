@@ -336,7 +336,7 @@ $(function() {
       });
 
       // Add padding to body to prevent content jump
-      $('body').css('padding-top', this.$navbar.outerHeight());
+      // $('body').css('padding-top', this.$navbar.outerHeight());
 
       this.navOffsetTop = this.$navbar.offset().top;
       this.cacheSections();
