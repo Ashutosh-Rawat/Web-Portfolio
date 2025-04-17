@@ -34,15 +34,14 @@ $(function() {
     });
 
     // Trigger animation if elements are already in view on page load
-    if ($('.amcat-stats').offset().top < $(window).height()) {
+    if ($('.amcat-stats').length && $('.amcat-stats').offset().top < $(window).height()) {
         animateProgressBars();
     }
 
     // Smooth scrolling for navigation links
-    $('a[href^="#"]').on('click', function(e) {
+    $('a[href^="#"]').not('[href="#"]').on('click', function(e) {
         e.preventDefault();
         const target = $(this).attr('href');
-        if (target === '#') return;
         
         const navbarHeight = $('.navbar.sticky').outerHeight() || 70;
         const targetPosition = $(target).offset().top - navbarHeight;
@@ -81,19 +80,29 @@ $(function() {
     });
 
     // Set active nav item based on scroll position
-    $(window).scroll(function() {
-        const scrollPosition = $(window).scrollTop();
+    function updateActiveNavItem() {
+        const scrollPosition = $(window).scrollTop() + ($(window).height() / 2);
         const navbarHeight = $('.navbar.sticky').outerHeight() || 70;
         
         $('.section').each(function() {
             const sectionId = $(this).attr('id');
-            const sectionTop = $(this).offset().top - navbarHeight - 20;
+            const sectionTop = $(this).offset().top - navbarHeight;
             const sectionBottom = sectionTop + $(this).outerHeight();
             
-            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
                 $('.navbar-nav .nav-item').removeClass('active');
                 $(`.navbar-nav a[href="#${sectionId}"]`).parent().addClass('active');
             }
         });
-    });
+    }
+
+    // Run on scroll and page load
+    $(window).scroll(updateActiveNavItem);
+    updateActiveNavItem();
+
+    // Highlight current section on page load if hash exists
+    const hash = window.location.hash;
+    if (hash) {
+        $(`.navbar-nav a[href="${hash}"]`).parent().addClass('active');
+    }
 });
