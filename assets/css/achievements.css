@@ -4,17 +4,25 @@
 
    html {
     scroll-behavior: smooth;
-}
-
-.page-achievements {
-    background: #fff;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    padding-top: 0;
+    margin: 0;
+  }
+  
+  .page-achievements {
+    background-color: #fff;
     position: relative;
     overflow: hidden;
     padding: 100px 0 60px;
     min-height: 100vh;
-}
-
-.page-achievements::before {
+  }
+  
+  .page-achievements::before {
     content: '';
     position: absolute;
     top: 0;
@@ -22,64 +30,148 @@
     width: 100%;
     height: 100%;
     background: 
-        linear-gradient(135deg, rgba(239,55,36,0.03) 0%, rgba(239,55,36,0.01) 100%),
-        url(../assets/img/bg_banner.jpg) center/cover fixed;
+      linear-gradient(135deg, rgba(239,55,36,0.03) 0%, rgba(239,55,36,0.01) 100%),
+      url(../assets/img/bg_banner.jpg) center/cover fixed;
     opacity: 0.15;
     z-index: 0;
-}
-
-.page-achievements .container {
+  }
+  
+  .page-achievements .container {
     position: relative;
     z-index: 1;
     background: rgba(255,255,255,0.85);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 5px 30px rgba(0,0,0,0.05);
-}
-
-/* Section Headers */
-.section {
+  }
+  
+  /* Navbar Styles */
+  .navbar.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(52, 58, 64, 0.95);
+    transition: all 0.3s ease;
+    z-index: 1030;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    padding: 10px 0;
+  }
+  
+  .navbar.sticky .navbar-brand {
+    color: white !important;
+    font-weight: 500;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar.sticky .navbar-brand .ti-home {
+    font-size: 1.5rem;
+    margin-right: 8px;
+  }
+  
+  .navbar.sticky .nav-link {
+    color: rgba(255,255,255,0.8) !important;
+    transition: all 0.3s ease;
+    padding: 8px 15px !important;
+    position: relative;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  
+  .navbar.sticky .nav-link:hover,
+  .navbar.sticky .nav-item.active .nav-link {
+    color: white !important;
+  }
+  
+  .navbar.sticky .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    height: 2px;
+    background-color: #EF3724;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar.sticky .nav-item.active .nav-link::after,
+  .navbar.sticky .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+  
+  .navbar.sticky .navbar-toggler {
+    border-color: rgba(255,255,255,0.5);
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .navbar.sticky .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    width: 1.25em;
+    height: 1.25em;
+  }
+  
+  .navbar.sticky .navbar-collapse {
+    background-color: rgba(52, 58, 64, 0.98);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  @media (min-width: 992px) {
+    .navbar.sticky .navbar-collapse {
+      background-color: transparent;
+      padding: 0;
+      margin-top: 0;
+    }
+  }
+  
+  /* Section Styles */
+  .section {
     margin-bottom: 80px;
     position: relative;
-}
-
-.section h3 {
+  }
+  
+  .section h3 {
     font-weight: 600;
     margin-bottom: 15px;
     color: #343a40;
-}
-
-.divider {
+  }
+  
+  .divider {
     display: block;
     margin: 10px auto 20px;
     max-width: 150px;
     border-bottom: 2px dashed #EF3724;
-}
-
-/* Navigation Active State */
-.navbar-nav .nav-item.active .nav-link {
-    color: white !important;
-    font-weight: 600;
-}
-
-/* Certification Cards */
-.card-certification {
+  }
+  
+  /* Card Styles */
+  .card-certification, 
+  .research-card,
+  .profile-card,
+  .hobby-card,
+  .amcat-card {
     border: none;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    transition: all 0.3s ease;
     background: rgba(255,255,255,0.98);
-}
-
-.certification-row {
-    margin-bottom: 40px;
-    row-gap: 30px;
-}
-
-.certification-header {
+  }
+  
+  .card-certification:hover,
+  .research-card:hover,
+  .profile-card:hover,
+  .hobby-card:hover,
+  .amcat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  }
+  
+  /* Certification Card Styles */
+  .certification-header {
     position: relative;
     height: 180px;
     overflow: hidden;
@@ -88,470 +180,466 @@
     justify-content: center;
     background: #f4f5f8;
     padding: 20px;
-}
-
-/* Coding Ninjas logo size */
-.card-certification .certification-header img[alt="Coding Ninjas"] {
+  }
+  
+  .card-certification .certification-header img[alt="Coding Ninjas"] {
     max-height: 140px !important;
     max-width: 140px !important;
-}
-
-.company-logo {
+  }
+  
+  .company-logo {
     max-height: 80%;
     max-width: 80%;
     object-fit: contain;
-}
-
-.card-body {
+    transition: transform 0.5s ease;
+  }
+  
+  .card-certification:hover .company-logo {
+    transform: scale(1.05);
+  }
+  
+  .card-body {
     padding: 25px;
-    flex: 1;
-}
-
-.card-body h4 {
+  }
+  
+  .card-body h4 {
     margin-bottom: 5px;
     color: #343a40;
     font-weight: 600;
-}
-
-.card-body p.text-muted {
+  }
+  
+  .card-body p.text-muted {
     font-size: 14px;
     margin-bottom: 15px;
     color: #6c757d;
-}
-
-.certification-details p {
+  }
+  
+  .certification-details p {
     color: #495057;
     margin-bottom: 20px;
     line-height: 1.6;
-}
-
-.tech-tags {
+  }
+  
+  /* Tech Tags */
+  .tech-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 20px;
-}
-
-.tech-tags span {
+  }
+  
+  .tech-tags span {
     background: rgba(239, 55, 36, 0.1);
     color: #EF3724;
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 500;
-}
-
-/* Research Card */
-.research-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.98);
-}
-
-.research-details {
+    transition: all 0.3s ease;
+  }
+  
+  .tech-tags span:hover {
+    background: #EF3724;
+    color: white;
+  }
+  
+  /* Research Card Styles */
+  .research-details {
     margin: 20px 0;
-}
-
-.research-features {
+  }
+  
+  .research-features {
     list-style: none;
     padding-left: 0;
     margin-bottom: 20px;
-}
-
-.research-features li {
+  }
+  
+  .research-features li {
     margin-bottom: 10px;
     padding-left: 25px;
     position: relative;
     color: #495057;
     line-height: 1.6;
-}
-
-.research-features li .ti-check {
+  }
+  
+  .research-features li .ti-check {
     position: absolute;
     left: 0;
     top: 2px;
     color: #EF3724;
-}
-
-/* Profile Cards */
-.profile-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    height: 100%;
-    background: rgba(255,255,255,0.98);
-}
-
-.profile-header {
+  }
+  
+  /* Profile Card Styles */
+  .profile-header {
     padding: 20px;
     text-align: center;
     color: white;
     position: relative;
-}
-
-.profile-header img {
+  }
+  
+  .profile-header img {
     width: 50px;
     height: 50px;
     object-fit: contain;
     margin-bottom: 15px;
-}
-
-.profile-header h4 {
+    transition: transform 0.5s ease;
+  }
+  
+  .profile-card:hover .profile-header img {
+    transform: scale(1.1);
+  }
+  
+  .profile-header h4 {
     margin-bottom: 0;
     font-weight: 500;
-}
-
-.profile-header.leetcode {
+  }
+  
+  .profile-header.leetcode {
     background: linear-gradient(135deg, #FFA116 0%, #F7A117 100%);
-}
-
-.profile-header.hackerrank {
+  }
+  
+  .profile-header.hackerrank {
     background: linear-gradient(135deg, #1BA94C 0%, #0F9D58 100%);
-}
-
-.profile-header.naukri {
+  }
+  
+  .profile-header.naukri {
     background: linear-gradient(135deg, #1F5B98 0%, #0F4B8F 100%);
-}
-
-.profile-header.linkedin {
+  }
+  
+  .profile-header.linkedin {
     background: linear-gradient(135deg, #0077B5 0%, #006097 100%);
-}
-
-.profile-body {
+  }
+  
+  .profile-body {
     padding: 20px;
-}
-
-.stat-item {
+  }
+  
+  .stat-item {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-}
-
-.stat-item .ti-star,
-.stat-item .ti-medall {
+  }
+  
+  .stat-item .ti-star,
+  .stat-item .ti-medall {
     font-size: 20px;
     margin-right: 10px;
     color: #EF3724;
-}
-
-.stat-item h5 {
+  }
+  
+  .stat-item h5 {
     margin-bottom: 2px;
     font-size: 15px;
     color: #343a40;
-}
-
-.stat-item p {
+  }
+  
+  .stat-item p {
     margin-bottom: 0;
     font-size: 12px;
     color: #6c757d;
-}
-
-/* AMCAT Cards */
-.amcat-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.98);
-    height: 100%;
-    padding: 30px;
-}
-
-.amcat-stats {
+  }
+  
+  /* AMCAT Card Styles */
+  .amcat-stats {
     margin-top: 20px;
-}
-
-.stat-item {
-    margin-bottom: 25px;
-}
-
-.stat-value {
+  }
+  
+  .stat-value {
     font-size: 28px;
     font-weight: 700;
     color: #EF3724;
     margin-bottom: 8px;
-}
-
-.stat-label {
+  }
+  
+  .stat-label {
     font-size: 16px;
     color: #6c757d;
     margin-bottom: 10px;
-}
-
-.stat-bar {
+  }
+  
+  .stat-bar {
     height: 8px;
     background-color: #f4f5f8;
     border-radius: 4px;
     overflow: hidden;
     margin-bottom: 8px;
-}
-
-.stat-progress {
+  }
+  
+  .stat-progress {
     height: 100%;
     background-color: #EF3724;
     border-radius: 4px;
     transition: width 1s ease;
-}
-
-.stat-description {
+  }
+  
+  .stat-description {
     font-size: 14px;
     color: #6c757d;
     margin-top: 5px;
     font-style: italic;
-}
-
-.personality-traits {
+  }
+  
+  .personality-traits {
     margin: 25px 0;
-}
-
-.trait-item {
+  }
+  
+  .trait-item {
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px dashed #eee;
-}
-
-.trait-item:last-child {
+  }
+  
+  .trait-item:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
-}
-
-.trait-name {
+  }
+  
+  .trait-name {
     font-weight: 600;
     color: #343a40;
     display: block;
     margin-bottom: 5px;
     font-size: 16px;
-}
-
-.trait-desc {
+  }
+  
+  .trait-desc {
     color: #495057;
     font-size: 15px;
     line-height: 1.5;
-}
-
-.amcat-details {
+  }
+  
+  .amcat-details {
     list-style: none;
     padding-left: 0;
     margin-top: 20px;
-}
-
-.amcat-details li {
+  }
+  
+  .amcat-details li {
     margin-bottom: 10px;
     padding-left: 25px;
     position: relative;
     color: #495057;
     line-height: 1.5;
-}
-
-.amcat-details li .ti-check-box {
+  }
+  
+  .amcat-details li .ti-check-box {
     position: absolute;
     left: 0;
     top: 2px;
     color: #EF3724;
-}
-
-/* Project Cards */
-.project-highlight-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    background: rgba(255,255,255,0.98);
-    height: 100%;
-}
-
-.project-image {
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-}
-
-.project-details {
-    padding: 25px;
-}
-
-.project-details h4 {
-    margin-bottom: 10px;
-    color: #343a40;
-}
-
-.project-meta {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-    color: #6c757d;
-    font-size: 14px;
-}
-
-.project-meta span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.project-details p {
-    color: #495057;
-    margin-bottom: 20px;
-    line-height: 1.6;
-}
-
-.project-links {
-    display: flex;
-    gap: 10px;
-}
-
-/* Hobbies Section */
-.hobby-card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    height: 100%;
-    background: rgba(255,255,255,0.98);
-    padding: 25px;
-}
-
-.hobby-list {
+  }
+  
+  /* Hobby Card Styles */
+  .hobby-list {
     margin-top: 20px;
-}
-
-.hobby-item {
+  }
+  
+  .hobby-item {
     margin-bottom: 12px;
     padding-bottom: 12px;
     border-bottom: 1px dashed #eee;
-}
-
-.hobby-item:last-child {
+  }
+  
+  .hobby-item:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
-}
-
-.hobby-item h5 {
+  }
+  
+  .hobby-item h5 {
     margin-bottom: 2px;
     color: #343a40;
-}
-
-.hobby-item small {
+  }
+  
+  .hobby-item small {
     font-style: italic;
     color: #6c757d;
     font-size: 0.85em;
-}
-
-.chess-profiles {
+  }
+  
+  .chess-profiles {
     display: flex;
     flex-direction: column;
-}
-
-.chess-profile {
+  }
+  
+  .chess-profile {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-}
-
-.chess-features {
+  }
+  
+  .chess-features {
     list-style: none;
     padding-left: 0;
     margin-top: 15px;
-}
-
-.chess-features li {
+  }
+  
+  .chess-features li {
     margin-bottom: 8px;
     padding-left: 25px;
     position: relative;
     color: #495057;
-}
-
-.chess-features li .ti-check-box {
+  }
+  
+  .chess-features li .ti-check-box {
     position: absolute;
     left: 0;
     top: 2px;
     color: #EF3724;
-}
-
-/* Buttons */
-.btn-theme {
+  }
+  
+  /* Buttons */
+  .btn-theme {
     background-color: #EF3724;
     border-color: #EF3724;
     color: white;
     transition: all 0.3s ease;
     font-weight: 500;
-}
-
-.btn-theme:hover {
+  }
+  
+  .btn-theme:hover {
     background-color: #c52a1d;
     border-color: #c52a1d;
     color: white;
     box-shadow: 0 4px 15px rgba(239, 55, 36, 0.3);
-}
-
-.btn-theme-outline {
+  }
+  
+  .btn-theme-outline {
     border-color: #EF3724;
     color: #EF3724;
     background-color: transparent;
     transition: all 0.3s ease;
     font-weight: 500;
-}
-
-.btn-theme-outline:hover {
+  }
+  
+  .btn-theme-outline:hover {
     background-color: #EF3724;
     color: white;
-}
-
-.btn-sm {
+  }
+  
+  .btn-sm {
     padding: 8px 20px;
     font-size: 14px;
     border-radius: 30px;
-}
+  }
 
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-    .profile-card, .hobby-card {
-        margin-bottom: 30px;
-    }
-}
-
-@media (max-width: 768px) {
+  .page-funfact {
+    height: 300px;
+  }
+  
+  /* Back to top button */
+  .btn-back_to_top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: #EF3724;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 20px rgba(239, 55, 36, 0.3);
+  }
+  
+  .btn-back_to_top.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .btn-back_to_top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(239, 55, 36, 0.4);
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 1200px) {
     .certification-header {
-        height: 150px;
+      height: 160px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .profile-card, .hobby-card {
+      margin-bottom: 30px;
     }
     
+    .navbar.sticky {
+      padding: 8px 0;
+    }
+    
+    .navbar.sticky .navbar-brand {
+      font-size: 1.1rem;
+    }
+    
+    .certification-header {
+      height: 150px;
+    }
+  }
+  
+  @media (max-width: 768px) {
     .page-achievements {
-        padding: 80px 0 40px;
+      padding: 80px 0 40px;
+    }
+    
+    .navbar.sticky .nav-link {
+      padding: 10px 0 !important;
+      margin: 5px 0;
+    }
+    
+    .navbar.sticky .nav-link::after {
+      left: 0;
+      right: 0;
+    }
+    
+    .fun-fact-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .section {
+      margin-bottom: 60px;
     }
     
     .amcat-card {
-        margin-bottom: 30px;
+      margin-bottom: 30px;
     }
-    
-    .project-details {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 576px) {
+  }
+  
+  @media (max-width: 576px) {
     .tech-tags span {
-        font-size: 11px;
-        padding: 3px 8px;
+      font-size: 11px;
+      padding: 3px 8px;
     }
     
     .stat-value {
-        font-size: 24px;
+      font-size: 24px;
     }
     
     .section h3 {
-        font-size: 1.5rem;
-    }
-    
-    .project-links {
-        flex-direction: column;
+      font-size: 1.5rem;
     }
     
     .hobby-item h5 {
-        font-size: 1rem;
+      font-size: 1rem;
     }
-}
+    
+    .btn-back_to_top {
+      width: 45px;
+      height: 45px;
+      font-size: 1.3rem;
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    .page-achievements .container {
+      padding: 20px;
+    }
+  }
