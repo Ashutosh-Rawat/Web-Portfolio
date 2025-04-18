@@ -273,7 +273,69 @@ $(function() {
     }
   };
 
-  // Project Modal Initialization
+  // Initialize project carousel
+  function initProjectCarousel(images, title) {
+    const $carousel = $('.project-carousel');
+    $carousel.owlCarousel('destroy');
+    $carousel.empty();
+    
+    images.forEach((img, index) => {
+      $carousel.append(`
+        <div class="item">
+          <img src="${img}" alt="${title} - Screenshot ${index + 1}" class="img-fluid">
+        </div>
+      `);
+    });
+    
+    $carousel.owlCarousel({
+      items: 1,
+      loop: true,
+      margin: 20,
+      nav: true,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 5000,
+      autoplayHoverPause: true,
+      navText: [
+        '<span class="ti-arrow-left"></span>',
+        '<span class="ti-arrow-right"></span>'
+      ],
+      responsive: {
+        0: { stagePadding: 10 },
+        768: { stagePadding: 30 },
+        992: { stagePadding: 50 }
+      }
+    });
+  }
+
+  // Initialize Isotope for filtering
+  const $grid = $('.gridder').isotope({
+    itemSelector: '.grid-item',
+    layoutMode: 'fitRows',
+    stagger: 30,
+    hiddenStyle: {
+      opacity: 0,
+      transform: 'scale(0.001)'
+    },
+    visibleStyle: {
+      opacity: 1,
+      transform: 'scale(1)'
+    }
+  });
+
+  // Filter projects
+  $('.filterable-button').on('click', 'button', function() {
+    const filterValue = $(this).attr('data-filter');
+    $('.filterable-button button').removeClass('selected');
+    $(this).addClass('selected');
+    
+    $grid.isotope({ 
+      filter: filterValue,
+      transitionDuration: '0.6s'
+    });
+  });
+
+  // Project Click Handler
   $(document).on('click', '.grid-item', function() {
     const projectId = $(this).data('project');
     
@@ -302,76 +364,17 @@ $(function() {
     });
     
     // Set project links
-    $('#projectLiveLink').attr('href', project.liveLink || '#');
-    $('#projectCodeLink').attr('href', project.codeLink || '#');
+    $('#projectLiveLink').attr('href', project.liveLink || '#').toggleClass('disabled', !project.liveLink);
+    $('#projectCodeLink').attr('href', project.codeLink || '#').toggleClass('disabled', !project.codeLink);
     
     // Initialize carousel
-    const $carousel = $('.project-carousel');
-    $carousel.owlCarousel('destroy');
-    $carousel.empty();
-    
-    project.images.forEach((img, index) => {
-      $carousel.append(`
-        <div class="item">
-          <img src="${img}" alt="${project.title} - Screenshot ${index + 1}" class="img-fluid">
-        </div>
-      `);
-    });
-    
-    // Configure carousel
-    $carousel.owlCarousel({
-      items: 1,
-      loop: true,
-      margin: 20,
-      nav: true,
-      dots: true,
-      autoplay: true,
-      autoplayTimeout: 5000,
-      autoplayHoverPause: true,
-      navText: [
-        '<span class="ti-arrow-left"></span>',
-        '<span class="ti-arrow-right"></span>'
-      ],
-      responsive: {
-        0: { stagePadding: 10 },
-        768: { stagePadding: 30 },
-        992: { stagePadding: 50 }
-      }
-    });
+    initProjectCarousel(project.images, project.title);
     
     // Show modal with animation
     $('#projectModal').modal('show')
       .on('shown.bs.modal', function() {
-        $carousel.trigger('refresh.owl.carousel');
+        $('.project-carousel').trigger('refresh.owl.carousel');
       });
-  });
-
-  // Initialize Isotope for filtering
-  const $grid = $('.gridder').isotope({
-    itemSelector: '.grid-item',
-    percentPosition: true,
-    layoutMode: 'fitRows',
-    stagger: 30,
-    hiddenStyle: {
-      opacity: 0,
-      transform: 'scale(0.001)'
-    },
-    visibleStyle: {
-      opacity: 1,
-      transform: 'scale(1)'
-    }
-  });
-
-  // Filter projects
-  $('.filterable-button').on('click', 'button', function() {
-    const filterValue = $(this).attr('data-filter');
-    $('.filterable-button button').removeClass('selected');
-    $(this).addClass('selected');
-    
-    $grid.isotope({ 
-      filter: filterValue,
-      transitionDuration: '0.6s'
-    });
   });
 
   // Handle window resize
@@ -383,4 +386,22 @@ $(function() {
   // Initialize on page load
   updateActiveNavItem();
   $('body').css('padding-top', $('.navbar.sticky').outerHeight());
+
+  // Initialize counter animation
+  $('.number').each(function() {
+    const $this = $(this);
+    const target = parseInt($this.attr('data-number'));
+    const duration = 2000;
+    
+    $({ count: 0 }).animate({ count: target }, {
+      duration: duration,
+      easing: 'swing',
+      step: function() {
+        $this.text(Math.floor(this.count));
+      },
+      complete: function() {
+        $this.text(target);
+      }
+    });
+  });
 });
