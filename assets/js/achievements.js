@@ -1,214 +1,149 @@
-$(function() {
-    // Initialize WOW.js for animations
-    new WOW({
-        boxClass: 'wow',
-        animateClass: 'animated',
-        offset: 50,
-        mobile: true,
-        live: true
-    }).init();
+// Initialize animations
+new WOW().init();
 
-    // Cache DOM elements
-    const $navbar = $('.navbar.sticky');
-    const $navLinks = $('.navbar-nav .nav-link');
-    const $sections = $('.section');
-    const $backToTop = $('.btn-back_to_top');
-    const $navbarCollapse = $('.navbar-collapse');
-    const $navbarToggler = $('.navbar-toggler');
-    const $body = $('body');
+// Back to top button
+const backToTopButton = document.querySelector('.btn-back_to_top');
 
-    // Set initial navbar background
-    function setNavbarBackground() {
-        if ($(window).scrollTop() > 50) {
-            $navbar.css('background-color', 'rgba(52, 58, 64, 0.95)');
-        } 
-        // else {
-        //     $navbar.css('background-color', 'rgba(104, 102, 102, 0.8)');
-        // }
+// Show/hide back to top button
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 400) {
+    backToTopButton.classList.add('active');
+  } else {
+    backToTopButton.classList.remove('active');
+  }
+  updateActiveNavItem();
+});
+
+// Back to top functionality
+backToTopButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+// Update active nav item based on scroll position
+function updateActiveNavItem() {
+  const sections = document.querySelectorAll('.section[id]');
+  const scrollPosition = window.scrollY + 100; // Adjusted offset
+  
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const sectionId = section.getAttribute('id');
+    
+    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      document.querySelectorAll('.navbar-nav .nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      const correspondingNavItem = document.querySelector(`.navbar-nav a[href="#${sectionId}"]`).parentElement;
+      if (correspondingNavItem) {
+        correspondingNavItem.classList.add('active');
+      }
     }
-    setNavbarBackground();
+  });
+}
 
-    // Enhanced Smooth Scrolling for Navigation
-    function handleNavLinkClick(e) {
-        e.preventDefault();
-        const $this = $(this);
-        const target = $this.attr('href');
-        
-        if (target === '#' || !$(target).length) return;
-        
-        const navbarHeight = $navbar.outerHeight() || 70;
-        const targetPosition = $(target).offset().top - navbarHeight;
-        
-        $('html, body').stop().animate({
-            scrollTop: targetPosition
-        }, {
-            duration: 800,
-            easing: 'swing',
-            complete: function() {
-                // Update URL hash after scroll completes
-                if (history.pushState) {
-                    history.pushState(null, null, target);
-                } else {
-                    window.location.hash = target;
-                }
-            }
+// Smooth scrolling for nav links
+document.querySelectorAll('.navbar-nav .nav-link.scroll-to').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    
+    if (targetElement) {
+      const navbarHeight = document.querySelector('.navbar.sticky').offsetHeight;
+      const targetPosition = targetElement.offsetTop - navbarHeight;
+      
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+      
+      // Update URL hash without jumping
+      if (history.pushState) {
+        history.pushState(null, null, targetId);
+      } else {
+        window.location.hash = targetId;
+      }
+      
+      // Update active nav item
+      document.querySelectorAll('.navbar-nav .nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      this.parentElement.classList.add('active');
+      
+      // Close mobile menu if open
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+      if (navbarCollapse.classList.contains('show')) {
+        navbarCollapse.classList.remove('show');
+      }
+    }
+  });
+});
+
+// Handle page load with hash
+function handleInitialHash() {
+  if (window.location.hash) {
+    setTimeout(() => {
+      const target = document.querySelector(window.location.hash);
+      if (target) {
+        const navbarHeight = document.querySelector('.navbar.sticky').offsetHeight;
+        window.scrollTo({
+          top: target.offsetTop - navbarHeight,
+          behavior: 'auto'
         });
-        
-        updateActiveNavItem($this);
-        $navbarCollapse.collapse('hide');
+      }
+    }, 100);
+  }
+}
+
+// Initialize counter animation
+function animateCounters() {
+  const counters = document.querySelectorAll('.number');
+  const speed = 200;
+  
+  counters.forEach(counter => {
+    const target = +counter.getAttribute('data-number');
+    const count = +counter.innerText;
+    const increment = target / speed;
+    
+    if (count < target) {
+      counter.innerText = Math.ceil(count + increment);
+      setTimeout(animateCounters, 1);
+    } else {
+      counter.innerText = target;
     }
-    $navLinks.on('click', handleNavLinkClick);
+  });
+}
 
-    // Update active nav item
-    function updateActiveNavItem($clickedLink) {
-        $navLinks.parent().removeClass('active');
-        
-        if ($clickedLink) {
-            $clickedLink.parent().addClass('active');
-        } else {
-            // Find active section based on scroll position
-            const scrollPosition = $(window).scrollTop() + ($(window).height() / 3);
-            const navbarHeight = $navbar.outerHeight() || 70;
-            let foundActive = false;
-            
-            $sections.each(function() {
-                const $section = $(this);
-                const sectionTop = $section.offset().top - navbarHeight;
-                const sectionBottom = sectionTop + $section.outerHeight();
-                
-                if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
-                    const sectionId = $section.attr('id');
-                    $(`.navbar-nav a[href="#${sectionId}"]`).parent().addClass('active');
-                    foundActive = true;
-                    return false; // Break the loop
-                }
-            });
-            
-            // If no section found, check if we're at the top of the page
-            if (!foundActive && $(window).scrollTop() < 100) {
-                $navLinks.first().parent().addClass('active');
-            }
-        }
+// Close mobile menu when clicking outside
+document.addEventListener('click', function(e) {
+  const navbar = document.querySelector('.navbar');
+  const navbarToggler = document.querySelector('.navbar-toggler');
+  
+  if (!navbar.contains(e.target) && !e.target.isSameNode(navbarToggler)) {
+    const navbarCollapse = document.querySelector('.navbar-collapse.show');
+    if (navbarCollapse) {
+      navbarCollapse.classList.remove('show');
     }
+  }
+});
 
-    // Throttle scroll events
-    let scrollTimeout;
-    function handleScroll() {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(function() {
-            setNavbarBackground();
-            updateActiveNavItem();
-            
-            // Show/hide back to top button
-            if ($(window).scrollTop() > 400) {
-                $backToTop.addClass('active');
-            } else {
-                $backToTop.removeClass('active');
-            }
-        }, 100);
-    }
-    $(window).on('scroll', handleScroll);
-
-    // Back to top button
-    $backToTop.on('click', function(e) {
-        e.preventDefault();
-        $('html, body').animate({
-            scrollTop: 0
-        }, 800, 'swing');
-    });
-
-    // Handle page load with hash
-    function handleInitialHash() {
-        const hash = window.location.hash;
-        if (hash && $(hash).length) {
-            // Scroll to section after short delay to allow DOM to load
-            setTimeout(function() {
-                const targetPosition = $(hash).offset().top - $navbar.outerHeight();
-                $('html, body').scrollTop(targetPosition);
-            }, 100);
-            
-            // Highlight the corresponding nav item
-            $(`.navbar-nav a[href="${hash}"]`).parent().addClass('active');
-        }
-    }
-    handleInitialHash();
-
-    // Close mobile menu when clicking outside
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.navbar').length && 
-            $navbarCollapse.hasClass('show') && 
-            !$(e.target).is($navbarToggler)) {
-            $navbarCollapse.collapse('hide');
-        }
-    });
-
-    // Animate progress bars when they come into view
-    function animateProgressBars() {
-        $('.stat-progress').each(function() {
-            const $this = $(this);
-            if (!$this.hasClass('animated')) {
-                const width = $this.data('width') || $this.attr('style').match(/width: (\d+)%/)[1];
-                $this.css('width', '0').animate({
-                    width: width + '%'
-                }, 1000);
-                $this.addClass('animated');
-            }
-        });
-    }
-
-    // Check if progress bars are visible on load
-    function checkProgressBarsOnLoad() {
-        $('.amcat-stats').each(function() {
-            const $element = $(this);
-            const elementTop = $element.offset().top;
-            const elementBottom = elementTop + $element.outerHeight();
-            const viewportTop = $(window).scrollTop();
-            const viewportBottom = viewportTop + $(window).height();
-            
-            if (elementBottom > viewportTop && elementTop < viewportBottom) {
-                animateProgressBars();
-            }
-        });
-    }
-    checkProgressBarsOnLoad();
-
-    // Animate numbers in fun facts section
-    function animateNumbers() {
-        $('.number').each(function() {
-            const $this = $(this);
-            const countTo = $this.attr('data-number');
-            const duration = 2000;
-            
-            $({ countNum: $this.text() }).animate({
-                countNum: countTo
-            }, {
-                duration: duration,
-                easing: 'swing',
-                step: function() {
-                    $this.text(Math.floor(this.countNum));
-                },
-                complete: function() {
-                    $this.text(this.countNum);
-                }
-            });
-        });
-    }
-    animateNumbers();
-
-    // Initialize active nav item on page load
-    updateActiveNavItem();
-
-    // Handle window resize
-    let resizeTimeout;
-    $(window).on('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            // Recalculate positions after resize
-            const hash = window.location.hash;
-            if (hash && $(hash).length) {
-                const targetPosition = $(hash).offset().top - $navbar.outerHeight();
-                $('html, body').scrollTop(targetPosition);
-            }
-        }, 250);
-    });
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize active nav item
+  updateActiveNavItem();
+  
+  // Handle hash links on page load
+  handleInitialHash();
+  
+  // Initialize counter animations
+  animateCounters();
+  
+  // Initialize WOW.js
+  new WOW().init();
 });
