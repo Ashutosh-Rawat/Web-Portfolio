@@ -21,9 +21,10 @@ $(function() {
     function setNavbarBackground() {
         if ($(window).scrollTop() > 50) {
             $navbar.css('background-color', 'rgba(52, 58, 64, 0.95)');
-        } else {
-            $navbar.css('background-color', 'rgba(104, 102, 102, 0.8)');
-        }
+        } 
+        // else {
+        //     $navbar.css('background-color', 'rgba(104, 102, 102, 0.8)');
+        // }
     }
     setNavbarBackground();
 
