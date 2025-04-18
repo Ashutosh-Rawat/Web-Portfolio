@@ -2,7 +2,7 @@ $(function() {
   // Initialize EmailJS with your public key
   emailjs.init("Z--PbmHadH3VtMEnr");
 
-  // Add custom easing function if needed
+  // Add custom easing function
   $.extend($.easing, {
     easeInOutExpo: function(x, t, b, c, d) {
       if (t === 0) return b;
@@ -90,27 +90,31 @@ $(function() {
   });
 
   // Enhanced Smooth Scrolling for Navigation
-  $('[data-animate="scrolling"]').on('click', function(e) {
-    e.preventDefault();
+  $('.navbar-nav .nav-link').on('click', function(e) {
     const target = $(this).attr('href');
     
-    // Check if target exists
-    if (target === '#' || !$(target).length) return;
+    // Check if target is external link
+    if (target.includes('.html')) {
+      return; // Let default behavior handle it
+    }
+    
+    e.preventDefault();
     
     // Calculate offset considering sticky navbar
     const navbarHeight = $('.navbar.sticky').outerHeight() || 70;
     const targetPosition = $(target).offset().top - navbarHeight;
     
-    // Smooth scroll with fallback to 'swing' if custom easing fails
-    try {
-      $('html, body').stop().animate({
-        scrollTop: targetPosition
-      }, 800, 'easeInOutExpo');
-    } catch (e) {
-      $('html, body').stop().animate({
-        scrollTop: targetPosition
-      }, 800, 'swing');
-    }
+    // Smooth scroll with easing
+    $('html, body').stop().animate({
+      scrollTop: targetPosition
+    }, 800, 'easeInOutExpo', function() {
+      // Update URL hash after scroll completes
+      if (history.pushState) {
+        history.pushState(null, null, target);
+      } else {
+        window.location.hash = target;
+      }
+    });
     
     // Update active nav item
     $('.navbar-nav .nav-item').removeClass('active');
@@ -132,29 +136,109 @@ $(function() {
     link.click();
     document.body.removeChild(link);
     
-    // Optional: Track download event
-    console.log('Resume downloaded');
     showNotification('Resume download started!');
   });
 
-  // Skill Items Animation
-  $('.skill-item').hover(
-    function() {
-      $(this).addClass('hover-effect');
-      $(this).find('.skill-icon').css('transform', 'scale(1.1)');
-    },
-    function() {
-      $(this).removeClass('hover-effect');
-      $(this).find('.skill-icon').css('transform', 'scale(1)');
-    }
-  );
+  // Initialize WOW.js for animations
+  new WOW({
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 50,
+    mobile: true,
+    live: true
+  }).init();
 
-  // Projects data - updated with all projects
+  // Back to top button
+  const $backToTop = $(".btn-back_to_top");
+
+  // Function to update active nav item based on scroll position
+  function updateActiveNavItem() {
+    const scrollPosition = $(window).scrollTop();
+    const navbarHeight = $('.navbar.sticky').outerHeight() || 70;
+    let foundActive = false;
+    
+    // Reset all active states
+    $('.navbar-nav .nav-item').removeClass('active');
+    
+    // Check each section
+    $('[id]').each(function() {
+      const $section = $(this);
+      const sectionTop = $section.offset().top - navbarHeight - 100;
+      const sectionBottom = sectionTop + $section.outerHeight();
+      
+      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+        const sectionId = $section.attr('id');
+        $(`.navbar-nav a[href="#${sectionId}"]`).parent().addClass('active');
+        foundActive = true;
+        return false; // Break the loop after first match
+      }
+    });
+    
+    // If at top of page and no section found, highlight home
+    if (!foundActive && scrollPosition < 100) {
+      $('.navbar-nav a[href="#home"]').parent().addClass('active');
+    }
+  }
+
+  // Handle scroll events with throttling
+  let scrollTimeout;
+  $(window).on('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+      // Show/hide back to top button
+      if ($(window).scrollTop() > 400) {
+        $backToTop.addClass('active');
+      } else {
+        $backToTop.removeClass('active');
+      }
+      
+      // Update active nav item
+      updateActiveNavItem();
+    }, 100);
+  });
+
+  // Back to top button click handler
+  $backToTop.on('click', function(e) {
+    e.preventDefault();
+    $('html, body').animate({
+      scrollTop: 0
+    }, 800, 'easeInOutExpo');
+  });
+
+  // Handle page load with hash
+  function handleInitialHash() {
+    const hash = window.location.hash;
+    if (hash && $(hash).length) {
+      // Scroll to section after short delay to allow DOM to load
+      setTimeout(function() {
+        const targetPosition = $(hash).offset().top - $('.navbar.sticky').outerHeight();
+        $('html, body').scrollTop(targetPosition);
+      }, 100);
+      
+      // Highlight the corresponding nav item
+      $(`.navbar-nav a[href="${hash}"]`).parent().addClass('active');
+    }
+  }
+  handleInitialHash();
+
+  // Close mobile menu when clicking outside
+  $(document).on('click', function(e) {
+    const $navbarCollapse = $('.navbar-collapse');
+    const $navbarToggler = $('.navbar-toggler');
+    
+    if (!$(e.target).closest('.navbar').length && 
+        $navbarCollapse.hasClass('show') && 
+        !$(e.target).is($navbarToggler)) {
+      $navbarCollapse.collapse('hide');
+    }
+  });
+
+  // Projects data
   const projects = {
     'job-portal': {
       title: 'Job Portal - Easily',
       period: 'July 2024 - December 2024',
-      description: 'A dynamic job portal with comprehensive features...',
+      description: 'A dynamic job portal with comprehensive features for job seekers and employers, including profile management, job listings, and application tracking.',
       technologies: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'EJS'],
       images: ['../assets/img/projects/easily/easily-img1.png', '../assets/img/projects/easily/easily-img2.png', '../assets/img/projects/easily/easily-img3.png', '../assets/img/projects/easily/easily-img4.png', '../assets/img/projects/easily/easily-img5.png'],
       liveLink: 'https://jobportal-easily.onrender.com/',
@@ -163,7 +247,7 @@ $(function() {
     'ecommerce-api': {
       title: 'E-commerce API',
       period: 'January 2024 - March 2024',
-      description: 'A RESTful API for e-commerce applications with product management, user authentication, and order processing.',
+      description: 'A RESTful API for e-commerce applications with product management, user authentication, and order processing capabilities.',
       technologies: ['Node.js', 'Express.js', 'MongoDB', 'JWT', 'REST'],
       images: ['../assets/img/projects/ecom-api/ecom-api-img1.png', '../assets/img/projects/ecom-api/ecom-api-img2.png', '../assets/img/projects/ecom-api/ecom-api-img3.png'],
       liveLink: 'https://ecom-api-kcuj.onrender.com/api/docs',
@@ -172,7 +256,7 @@ $(function() {
     'music-player': {
       title: 'Music Player',
       period: 'November 2023 - December 2023',
-      description: 'An interactive audio player with playlist management and visual effects.',
+      description: 'An interactive audio player with playlist management, visual effects, and responsive controls for an enhanced listening experience.',
       technologies: ['HTML5 Audio API', 'JavaScript', 'CSS3', 'Web Audio API'],
       images: ['../assets/img/projects/music-player/music-player-img1.png', '../assets/img/projects/music-player/music-player-img2.png'],
       liveLink: 'https://ashutosh-rawat.github.io/musicplayer/',
@@ -181,7 +265,7 @@ $(function() {
     'movieflix': {
       title: 'MovieFlix',
       period: 'April 2024 - June 2024',
-      description: 'A streaming service clone with movie listings and user profiles.',
+      description: 'A streaming service clone with movie listings, user profiles, and responsive design that works across all devices.',
       technologies: ['React', 'Node.js', 'MongoDB', 'Redux'],
       images: ['../assets/img/projects/movieflix/movieflix-img1.png', '../assets/img/projects/movieflix/movieflix-img2.png', '../assets/img/projects/movieflix/movieflix-img3.png', '../assets/img/projects/movieflix/movieflix-img4.png', '../assets/img/projects/movieflix/movieflix-img5.png', '../assets/img/projects/movieflix/movieflix-img6.png'],
       liveLink: 'https://ashutosh-rawat.github.io/Video-streaming-website-clone/',
@@ -189,7 +273,7 @@ $(function() {
     }
   };
 
-  // Project Modal Initialization with event delegation
+  // Project Modal Initialization
   $(document).on('click', '.grid-item', function() {
     const projectId = $(this).data('project');
     
@@ -211,10 +295,10 @@ $(function() {
     $('.project-description').html(project.description);
     
     // Build technology tags
-    const techTags = $('.tech-tags');
-    techTags.empty();
+    const $techTags = $('.tech-tags');
+    $techTags.empty();
     project.technologies.forEach(tech => {
-      techTags.append(`<span class="tech-tag">${tech}</span>`);
+      $techTags.append(`<span class="tech-tag">${tech}</span>`);
     });
     
     // Set project links
@@ -222,12 +306,12 @@ $(function() {
     $('#projectCodeLink').attr('href', project.codeLink || '#');
     
     // Initialize carousel
-    const carousel = $('.project-carousel');
-    carousel.owlCarousel('destroy');
-    carousel.empty();
+    const $carousel = $('.project-carousel');
+    $carousel.owlCarousel('destroy');
+    $carousel.empty();
     
     project.images.forEach((img, index) => {
-      carousel.append(`
+      $carousel.append(`
         <div class="item">
           <img src="${img}" alt="${project.title} - Screenshot ${index + 1}" class="img-fluid">
         </div>
@@ -235,7 +319,7 @@ $(function() {
     });
     
     // Configure carousel
-    carousel.owlCarousel({
+    $carousel.owlCarousel({
       items: 1,
       loop: true,
       margin: 20,
@@ -258,7 +342,7 @@ $(function() {
     // Show modal with animation
     $('#projectModal').modal('show')
       .on('shown.bs.modal', function() {
-        carousel.trigger('refresh.owl.carousel');
+        $carousel.trigger('refresh.owl.carousel');
       });
   });
 
@@ -290,102 +374,13 @@ $(function() {
     });
   });
 
-  // Initialize WOW.js for animations
-  new WOW({
-    boxClass: 'wow',
-    animateClass: 'animated',
-    offset: 50,
-    mobile: true,
-    live: true
-  }).init();
-
-  // Back to top button
-  const backTop = $(".btn-back_to_top");
-
-  $(window).scroll(function() {
-    if ($(window).scrollTop() > 400) {
-      backTop.css('visibility', 'visible').addClass('animated fadeIn');
-    } else {
-      backTop.css('visibility', 'hidden').removeClass('fadeIn');
-    }
+  // Handle window resize
+  $(window).on('resize', function() {
+    // Update body padding when navbar height changes
+    $('body').css('padding-top', $('.navbar.sticky').outerHeight());
   });
 
-  backTop.click(function() {
-    $('html, body').animate({
-      scrollTop: 0
-    }, 800, 'swing');
-    return false;
-  });
-
-  // Enhanced Sticky Navigation
-  const stickyNav = {
-    $navbar: $('.navbar.sticky'),
-    navOffsetTop: 0,
-    sections: [],
-
-    init: function() {
-      if (this.$navbar.length === 0) return;
-
-      // Add fixed position and z-index to navbar
-      this.$navbar.css({
-        'position': 'fixed',
-        'top': 0,
-        'width': '100%',
-        'z-index': 1030,
-        'transition': 'all 0.3s ease'
-      });
-
-      // Add padding to body to prevent content jump
-      // $('body').css('padding-top', this.$navbar.outerHeight());
-
-      this.navOffsetTop = this.$navbar.offset().top;
-      this.cacheSections();
-      this.bindEvents();
-      this.update();
-    },
-
-    cacheSections: function() {
-      this.sections = [];
-      $('[data-animate="scrolling"]').each((i, link) => {
-        const target = $(link).attr('href');
-        if (target && target !== '#') {
-          this.sections.push({
-            link: link,
-            target: $(target),
-            top: $(target).offset().top - 100
-          });
-        }
-      });
-    },
-
-    bindEvents: function() {
-      $(window).on('scroll', () => this.update());
-      $(window).on('resize', () => {
-        // Update body padding when navbar height changes
-        $('body').css('padding-top', this.$navbar.outerHeight());
-        this.navOffsetTop = this.$navbar.offset().top;
-        this.cacheSections();
-        this.update();
-      });
-    },
-
-    update: function() {
-      const scrollTop = $(window).scrollTop();
-      
-      // Always keep navbar fixed at top
-      this.$navbar.css('background-color', scrollTop > 50 ? 'rgba(52, 58, 64, 0.95)' : 'rgba(104, 102, 102, 0.8)');
-
-      // Update active section in navigation
-      this.sections.forEach(section => {
-        if (scrollTop >= section.top && 
-            (scrollTop < section.top + section.target.outerHeight())) {
-          $(section.link).parent().addClass('active')
-            .siblings().removeClass('active');
-        }
-      });
-    }
-  };
-
-  // Initialize sticky navigation
-  stickyNav.init();
+  // Initialize on page load
+  updateActiveNavItem();
+  $('body').css('padding-top', $('.navbar.sticky').outerHeight());
 });
