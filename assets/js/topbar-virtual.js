@@ -242,7 +242,7 @@ $(function() {
       technologies: ['HTML5', 'CSS3', 'Bootstrap 5', 'JavaScript', 'Node.js', 'Express.js', 'MongoDB', 'Mongoose', 'EJS'],
       images: ['../assets/img/projects/easily/easily-img1.png', '../assets/img/projects/easily/easily-img2.png', '../assets/img/projects/easily/easily-img3.png', '../assets/img/projects/easily/easily-img4.png', '../assets/img/projects/easily/easily-img5.png'],
       liveLink: 'https://jobportal-easily.onrender.com/',
-      codeLink: 'https://github.com/Ashutosh-Rawat/job-portal'
+      codeLink: 'https://github.com/Ashutosh-Rawat/JobPortal---Easily'
     },
     'ecommerce-api': {
       title: 'E-commerce API',
