@@ -130,7 +130,7 @@ $(function() {
     
     // Create temporary link
     const link = document.createElement('a');
-    link.href = '../../assets/docs/ashutosh_singh_rawat_ashutoshrawat325_gmail_com.pdf';
+    link.href = 'assets/docs/ashutosh_singh_rawat_ashutoshrawat325_gmail_com.pdf';
     link.download = 'Ashutosh_Singh_Rawat_Resume.pdf';
     document.body.appendChild(link);
     link.click();
