@@ -379,13 +379,13 @@ $(function() {
 
   // Handle window resize
   $(window).on('resize', function() {
-    // Update body padding when navbar height changes
-    $('body').css('padding-top', $('.navbar.sticky').outerHeight());
+    // Update body padding when navbar height changes (now +4px)
+    $('body').css('padding-top', $('.navbar.sticky').outerHeight() + 4);
   });
 
   // Initialize on page load
   updateActiveNavItem();
-  $('body').css('padding-top', $('.navbar.sticky').outerHeight());
+  $('body').css('padding-top', $('.navbar.sticky').outerHeight() + 4); // +4px here too
 
   // Initialize counter animation
   $('.number').each(function() {
